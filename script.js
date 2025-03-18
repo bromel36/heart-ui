@@ -1,61 +1,43 @@
-const heart = document.querySelector('.heart');
-const particlesContainer = document.querySelector('.particles');
+document.addEventListener('DOMContentLoaded', function () {
+    const heartContainer = document.querySelector('.heart-container');
+    const mainHeart = document.querySelector('.heart');
+    const numberOfTexts = 15; // Số lượng hiệu ứng chữ xuất hiện
+    const textOptions = ["bé Mi", "iu bé Mi"];
 
-// Tạo các hạt pháo hoa
-function createParticles() {
-    particlesContainer.innerHTML = '';
-    const particleCount = 40;
+    mainHeart.addEventListener('click', function (event) {
+        const heartRect = mainHeart.getBoundingClientRect();
+        const centerX = heartRect.left + heartRect.width / 2;
+        const centerY = heartRect.top + heartRect.height / 2;
 
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
+        for (let i = 0; i < numberOfTexts; i++) {
+            const textElement = document.createElement('span');
+            textElement.classList.add('floating-text');
+            textElement.textContent = textOptions[Math.floor(Math.random() * textOptions.length)];
+            document.body.appendChild(textElement); // Thêm vào body
 
-        const size = Math.random() * 8 + 4;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 80 + 20; // Khoảng cách ngẫu nhiên
+            const speed = Math.random() * 0.8 + 0.5; // Tốc độ ngẫu nhiên
 
-        particle.style.left = '50%';
-        particle.style.top = '50%';
+            const finalX = centerX + Math.cos(angle) * distance;
+            const finalY = centerY - Math.sin(angle) * distance; // Trừ để đi lên
 
-        particlesContainer.appendChild(particle);
-    }
-}
+            textElement.style.left = `${centerX}px`;
+            textElement.style.top = `${centerY}px`;
+            textElement.style.fontSize = `${Math.random() * 1.5 + 1}em`; // Kích thước chữ ngẫu nhiên
 
-// Hiệu ứng pháo hoa
-function explodeHeart() {
-    createParticles();
-    const particles = document.querySelectorAll('.particle');
-    heart.style.opacity = '0';
+            const animationDuration = speed * 2 + 0.5;
+            textElement.style.transition = `top ${animationDuration}s ease-out, left ${animationDuration}s ease-out, opacity ${animationDuration}s ease-out`;
 
-    particles.forEach((particle) => {
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 120 + 80;
-        const duration = Math.random() * 0.5 + 0.8;
+            setTimeout(() => {
+                textElement.style.left = `${finalX}px`;
+                textElement.style.top = `${finalY}px`;
+                textElement.style.opacity = 0;
+            }, 10); // Nhỏ để bắt đầu hiệu ứng ngay lập tức
 
-        const targetX = Math.cos(angle) * distance;
-        const targetY = Math.sin(angle) * distance;
-
-        particle.style.transition = `transform ${duration}s ease-out, opacity ${duration}s ease-out`;
-        particle.style.transform = `translate(${targetX}px, ${targetY}px)`;
-        particle.style.opacity = '1';
-        particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-
-        setTimeout(() => {
-            particle.style.opacity = '0';
-        }, duration * 1000);
+            setTimeout(() => {
+                textElement.remove();
+            }, animationDuration * 1000 + 50); // Xóa sau khi hoàn thành animation
+        }
     });
-
-    setTimeout(() => {
-        heart.style.transform = 'rotate(-45deg) scale(0.1)';
-        heart.style.opacity = '1';
-        heart.style.transition = 'transform 0.8s, opacity 0.8s';
-
-        setTimeout(() => {
-            heart.style.transform = 'rotate(-45deg) scale(1)';
-        }, 100);
-    }, 2000);
-}
-
-// Khởi tạo
-createParticles();
-heart.style.transition = 'transform 0.8s, opacity 0.8s';
+});

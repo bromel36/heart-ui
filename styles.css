@@ -99,3 +99,64 @@ html {
         transform: scale(1.2) rotate(45deg);
     }
 }
+
+/* ... your existing CSS ... */
+
+.burst-heart {
+    width: 20px;
+    height: 20px;
+    background-color: #ff6b6b;
+    position: absolute;
+    transform: rotate(45deg);
+    opacity: 1;
+}
+
+.burst-heart::before,
+.burst-heart::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.burst-heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.burst-heart::after {
+    top: 0;
+    left: -10px;
+}
+
+@keyframes burst {
+    0% {
+        transform: translate(0, 0) rotate(45deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--dx), var(--dy)) rotate(45deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* ... các kiểu CSS hiện có ... */
+
+
+*/
+/* ... các kiểu CSS hiện có ... */
+/* 
+.floating-text {
+    position: absolute;
+    color: #ff6b6b;
+
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5em;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+} */
