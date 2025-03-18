@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Mi - Heart Trail</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #fff;
+            background-color: #ff6f91;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            background-color: #ff8fa3;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            --heart-color: #ff6f91;
+            background: var(--heart-color);
+            transform: rotate(-45deg);
+            animation: float 6s ease-in-out forwards;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--heart-color);
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 10px;
+            top: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .heart {
+                width: 15px;
+                height: 15px;
+            }
+
+            .heart::before,
+            .heart::after {
+                width: 15px;
+                height: 15px;
+            }
+
+            .heart::before {
+                top: -7.5px;
+            }
+
+            .heart::after {
+                left: 7.5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>For My Lovely Mi</h1>
+    <button class="button" onclick="changeEffect()">Change Effect (Classic)</button>
+
+    <script>
+        let effectMode = 0;
+        let isMouseDown = false;
+        let mouseX = 0;
+        let mouseY = 0;
+        let intervalId;
+
+        // Theo dõi vị trí chuột
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Khi giữ chuột, tạo trái tim theo chuột
+        document.addEventListener('mousedown', () => {
+            isMouseDown = true;
+            intervalId = setInterval(() => {
+                if (isMouseDown) {
+                    const x = mouseX + Math.random() * 50 - 25; // Ngẫu nhiên vị trí
+                    const y = mouseY + Math.random() * 50 - 25;
+                    createHeart(x, y);
+                }
+            }, 100); // Tạo trái tim mỗi 100ms
+        });
+
+        // Khi thả chuột, dừng tạo trái tim
+        document.addEventListener('mouseup', () => {
+            isMouseDown = false;
+            clearInterval(intervalId);
+        });
+
+        // Hàm tạo trái tim
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+
+            // Thay đổi hiệu ứng dựa trên effectMode
+            if (effectMode === 1) {
+                heart.style.setProperty('--heart-color', '#ffcc5c'); // Màu vàng
+            } else if (effectMode === 2) {
+                const scale = Math.random() + 0.5; // Kích thước ngẫu nhiên từ 0.5 đến 1.5
+                heart.style.transform = `rotate(-45deg) scale(${scale})`;
+            }
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000); // Xóa sau 6 giây
+        }
+
+        // Thay đổi hiệu ứng khi nhấn nút
+        function changeEffect() {
+            effectMode = (effectMode + 1) % 3;
+            const button = document.querySelector('.button');
+            if (effectMode === 0) {
+                button.textContent = 'Change Effect (Classic)';
+            } else if (effectMode === 1) {
+                button.textContent = 'Change Effect (Golden)';
+            } else {
+                button.textContent = 'Change Effect (Random Size)';
+            }
+        }
+    </script>
+</body>
+
+</html>
